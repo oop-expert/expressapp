@@ -2,16 +2,19 @@ const express = require('express')
 
 const app = express()
 
-const urlencodedParser = express.urlencoded({extended: false})
+app.set("view engine", "hbs")
 
-app.get("/", function(request, response) {
-    response.sendFile(__dirname + "/index.html")
+app.use("/contact", function(_, response) {
+    response.render("contact.hbs", {
+        title: "Мои контакты",
+        emailsVisible: true,
+        email: ["gavgav@mycorp.com", "mioaw@mycorp.com"],
+        phone: "+1234567890"
+    })
 })
 
-app.post("/", urlencodedParser, function(request, response) {
-    if(!request.body) return response.sendStatus(400)
-    console.log(request.body)
-    response.send(`${request.body.userName} - ${request.body.userAge}`)
+app.use("/", function(_, response) {
+    response.send("Главная страница")
 })
 
 app.listen(3000, () => console.log("Сервер запущен..."))
