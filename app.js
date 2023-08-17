@@ -2,14 +2,16 @@ const express = require('express')
 
 const app = express()
 
+const urlencodedParser = express.urlencoded({extended: false})
 
-app.use('/about', function(request, response) {
-
-   console.log(request.query)
-   let id = request.query.user.id
-   let name = request.query.user.name
-
-   response.send("<h3>id: " + id + "<br>name = " + name + "</h3>")
+app.get("/", function(request, response) {
+    response.sendFile(__dirname + "/index.html")
 })
 
-app.listen(3000)
+app.post("/", urlencodedParser, function(request, response) {
+    if(!request.body) return response.sendStatus(400)
+    console.log(request.body)
+    response.send(`${request.body.userName} - ${request.body.userAge}`)
+})
+
+app.listen(3000, () => console.log("Сервер запущен..."))
